@@ -15,4 +15,5 @@ Features
 - 'Hexa' case designed by [Sean Yin](https://www.coroflot.com/sean_yin)
 
 [Assembly manual](Doc/IIICC_Assembly_Guide.pdf)
+
 [IIICC @ EasyEDA](https://easyeda.com/pigboard)
