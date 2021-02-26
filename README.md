@@ -16,4 +16,4 @@ Features
 
 [Assembly manual](Doc/IIICC_Assembly_Guide.pdf)
 
-[IIICC @ EasyEDA](https://easyeda.com/pigboard)
+[IIICC PCB & Ordering @ EasyEDA](https://easyeda.com/pigboard)
