@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DESCRIPTION Three Split keyboard with macropad
 
 /* Macropad */
-//#define MACROPAD_ENABLE //uncomment to enable macropad
+#define MACROPAD_ENABLE //uncomment to enable macropad
 
 /* OLED settings */
 //#define OLED_DISPLAY_ADDRESS 0x78 //128x64 sometimes run on 0x3C just like 128x32, that was the case for me

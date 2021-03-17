@@ -24,7 +24,7 @@ bool i2c_initialized = false;
 
 void i2c_initialize(void){
     dprint("I2C init start\n");
-      
+     
     if(!i2c_initialized) {
         i2c_init();
         i2c_initialized = true;
@@ -40,9 +40,9 @@ void i2c_initialize(void){
     i2c_write8(I2CA_ADDRESS, GPPUB, HIGH);
 
     if(i2c_last_error()) {
-        dprint("Unable to setup Device A\n");
+        dprint("Unable to setup right side!\n");
     }else {
-        dprint("Device A OK!\n");
+        dprint("Right side OK!\n");
     } 
     
     //2nd device
@@ -52,9 +52,9 @@ void i2c_initialize(void){
     //set B pull ups ON
     i2c_write8(I2CB_ADDRESS, GPPUB, HIGH);
     if(i2c_last_error()) {
-        dprint("Unable to setup Device B\n");
+        dprint("Unable to setup left side!\n");
     }else {
-        dprint("Device B OK!\n");
+        dprint("Left side OK!\n");
     }  
 
 #ifdef MACROPAD_ENABLE
@@ -65,9 +65,9 @@ void i2c_initialize(void){
     //set B pull ups ON
     i2c_write8(I2CM_ADDRESS, GPPUB, HIGH);
     if(i2c_last_error()) {
-        dprint("Unable to setup Device M\n");
+        dprint("Unable to setup macropad!\n");
     }else {
-        dprint("Device M OK!\n");
+        dprint("Macropad OK!\n");
     }  
 #endif
     
@@ -80,8 +80,7 @@ bool isI2C_initialized() {
 uint8_t i2c_read8(uint8_t addr, uint8_t reg) {
     uint8_t data = 0;
     last_err = i2c_start(addr, I2C_TIMEOUT); if(last_err) goto end;
-    last_err = i2c_readReg(addr, reg, &data, sizeof(data), I2C_TIMEOUT); if(last_err) goto end;
-    
+    last_err = i2c_readReg(addr, reg, &data, sizeof(data), I2C_TIMEOUT); if(last_err) goto end;    
     end:
         i2c_stop();
     return ~data;

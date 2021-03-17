@@ -99,9 +99,9 @@ uint8_t matrix_scan(void) {
         i2c_select_row_on(I2CM_ADDRESS, i);
         expander_data = i2c_read8(I2CM_ADDRESS, GPIOB);
         if(i2c_last_error()) {
-            dprint("Error while I2C data transfer. Rebooting.\n");
-            _delay_ms(1000);
+            dprint("Macropad connection error!\n");
             i2c_initialize();
+            current_row |= 0;
         }else {           
             current_row |= expander_data;                        
         } 
@@ -111,9 +111,9 @@ uint8_t matrix_scan(void) {
         i2c_select_row_on(I2CB_ADDRESS, i);
         expander_data = i2c_read8(I2CB_ADDRESS, GPIOB);        
         if(i2c_last_error()) {
-            dprint("Error while I2C data transfer. Rebooting.\n");
-            _delay_ms(1000);
+            dprint("Right side connection error!\n");
             i2c_initialize();
+            current_row |= 0;
         }else {  
             current_row |= expander_data;                       
         }
@@ -122,9 +122,9 @@ uint8_t matrix_scan(void) {
         i2c_select_row_on(I2CA_ADDRESS, i);
         expander_data = i2c_read8(I2CA_ADDRESS, GPIOB);        
         if(i2c_last_error()) {
-            dprint("Error while I2C data transfer. Rebooting.\n");
-            _delay_ms(1000);
-            i2c_initialize();
+            dprint("Left side connection error!\n");
+            i2c_initialize();            
+            current_row |= 0;
         }else {
             current_row |= expander_data;
         }

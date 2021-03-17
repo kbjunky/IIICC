@@ -32,6 +32,10 @@
   static uint16_t oled_timer = 0;
 #endif
 
+//Boot up LED animation
+#define BOOT_ANIM_ENABLED //enable boot animation
+#define BOOT_ANIM_DELAY 125 //delay for each step
+
 #define MOVE_UP 1
 #define MOVE_DOWN -1
 #define MOVE_STOP 0
@@ -80,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {\
                             KC_TRNS,   KC_TRNS,    KC_TRNS,   KC_TRNS,                       KC_TRNS,  KC_TRNS,  KC_HOME,  KC_PGDN,\
                                                               KC_TRNS,                       KC_TRNS,\
                                             KC_MYCM,                                                KC_TRNS,\
-                                  KC_TRNS, G(KC_L), KC_TRNS,                              KC_TRNS, KC_TRNS, KC_TRNS,\
+                                  LCTL(LSFT(KC_TAB)), G(KC_L), LCTL(KC_TAB),                              KC_TRNS, KC_TRNS, KC_TRNS,\
                                             KC_TRNS,                                                KC_TRNS,\
     KC_F1,          KC_VOLU,        KC_F8,\
     KC_F2,          KC_MUTE,        KC_F9,\
@@ -307,24 +311,29 @@ void clear_icon(uint8_t col, uint8_t row) {
 
 
 void keyboard_post_init_user(void) {
+#ifdef CONSOLE_ENABLE
   // Customise these values to desired behaviour
   debug_enable=true;
-  //debug_matrix=true;
-  //debug_keyboard=true;
-  //debug_mouse=true;
+  debug_matrix=true;
+  debug_keyboard=true;
+#endif
+
 #ifdef OLED_DRIVER_ENABLE
   oled_off();
 #endif
+#ifdef BOOT_ANIM_ENABLED
+ #ifdef RGBLIGHT_ENABLE
   rgblight_setrgb_range(0, 0, 0, 0, RGBLED_NUM);
 
   for(uint8_t i = 0;i < RGBLED_NUM;i++) {
     rgblight_setrgb_range(255, 255, 255, 0, i);
-    wait_ms(250);
+    wait_ms(BOOT_ANIM_DELAY);
   }
   rgblight_reload_from_eeprom();
-
+  #endif
+#endif
 #ifdef OLED_DRIVER_ENABLE
-  //oled_on(); 
   render_logo();  
 #endif  
+
 }
