@@ -36,10 +36,6 @@
 #define BOOT_ANIM_ENABLED //enable boot animation
 #define BOOT_ANIM_DELAY 125 //delay for each step
 
-#define MOVE_UP 1
-#define MOVE_DOWN -1
-#define MOVE_STOP 0
-
 #define _DFT 0
 #define _FN1 10
 #define _FN2 11
