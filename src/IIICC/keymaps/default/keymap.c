@@ -114,38 +114,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {\
 LEADER_EXTERNS();
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  static int8_t prev_move = MOVE_STOP;
 
   switch(keycode) {
     case KC_VOLU:
-      if((record->event.pressed) && (prev_move == MOVE_STOP) ) {
-        prev_move = MOVE_UP;
-      }
-
-      if(!record->event.pressed) {
-        if(prev_move == MOVE_UP) {
-          prev_move = MOVE_STOP;
-          register_code16(KC_VOLU);
-          unregister_code16(KC_VOLU);
-          render_action_icon(ICO_SPEAKER, ICO_UP);
-        }      
-      }     
-      return false;
+      if(record->event.pressed) {
+        render_action_icon(ICO_SPEAKER, ICO_UP);
+      }      
+      return true;
 
     case KC_VOLD:
-      if((record->event.pressed) && (prev_move == MOVE_STOP)) {
-        prev_move = MOVE_DOWN;
-        
+      if(record->event.pressed) {
+        render_action_icon(ICO_SPEAKER, ICO_DOWN);        
       }
-      if(!record->event.pressed) {
-        if(prev_move == MOVE_DOWN) {
-          prev_move = MOVE_STOP;
-          register_code16(KC_VOLD);
-          unregister_code16(KC_VOLD);
-          render_action_icon(ICO_SPEAKER, ICO_DOWN);
-        }      
-      }
-      return false;
+      return true;
 
       case RGB_HUI:
         render_action_icon(ICO_HUE, ICO_UP);

@@ -46,6 +46,14 @@ __attribute__((weak)) void matrix_scan_user(void) {}
 inline uint8_t matrix_rows(void) { return MATRIX_ROWS; }
 inline uint8_t matrix_cols(void) { return MATRIX_COLS; }
 
+#define ENC_RES 4
+#define ENCPAD 0x2
+#define ENC_MATRIX_POS 0x20000
+
+int8_t enc_state = 0;
+int8_t enc_count = 0;
+int8_t enc_states [] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
+
 /* HERE STARTS IMPLEMENTATION OF CUSTOM MATRIX HANDLING */
 matrix_row_t matrix_get_row(uint8_t row) {
     // TODO: return the requested row data
@@ -91,7 +99,8 @@ void matrix_init(void) {
 uint8_t matrix_scan(void) {
     
     bool changed = false;
-    uint8_t expander_data = 0;    
+    uint8_t expander_data = 0;
+    uint8_t enc_data = 0;   
     matrix_row_t current_row = 0;
 
     for(uint8_t i = 0; i < MATRIX_ROWS; i++) {
@@ -104,7 +113,18 @@ uint8_t matrix_scan(void) {
             current_row |= 0;
         }else {           
             current_row |= expander_data;                        
-        } 
+        }
+
+        if(i == 0) {
+            enc_data = current_row & ENCPAD;
+            enc_data <<= 1;
+        }
+
+        if(i == 1) {
+            enc_data |= (current_row & ENCPAD);
+            enc_data >>= 1;
+        }
+
         current_row <<= 8;
 #endif
         
@@ -137,6 +157,27 @@ uint8_t matrix_scan(void) {
     }     
 
     debounce(raw_matrix, matrix, MATRIX_ROWS, changed);
+
+    enc_count <<= 2;
+    enc_count |= enc_data;
+    enc_count &= 0xF;
+    enc_state += enc_states[enc_count];
+
+    if (enc_state <= -ENC_RES ) {
+        matrix[1] |= ENC_MATRIX_POS;
+        enc_state = 0;
+    }else {
+        matrix[1] &= ~ENC_MATRIX_POS;
+               
+    }
+
+    if (enc_state >= ENC_RES ) {
+        matrix[0] |= ENC_MATRIX_POS; 
+        enc_state = 0;
+    }else {
+        matrix[0] &= ~ENC_MATRIX_POS;
+               
+    }
 
     matrix_scan_quantum();
     
